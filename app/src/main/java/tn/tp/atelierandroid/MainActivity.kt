@@ -13,10 +13,26 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 
 class MainActivity : AppCompatActivity() {
+    private val fixedmap = mutableMapOf(
+        "G1" to 1,
+        "G2" to 8,
+        "G3" to 8
+    )
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        val tvPlacesG1 = findViewById<TextView>(R.id.tvPlacesG1)
+        val tvPlacesG2 = findViewById<TextView>(R.id.tvPlacesG2)
+        val tvPlacesG3 = findViewById<TextView>(R.id.tvPlacesG3)
+
+        fun updateCounters() {
+            tvPlacesG1.text = "G1 : ${fixedmap.getValue("G1")} places"
+            tvPlacesG2.text = "G2 : ${fixedmap.getValue("G2")} places"
+            tvPlacesG3.text = "G3 : ${fixedmap.getValue("G3")} places"
+        }
+
 
         // ----- Récupération des composants -----
         val etNom = findViewById<EditText>(R.id.etNom)
@@ -63,7 +79,17 @@ class MainActivity : AppCompatActivity() {
                 !confirme ->
                     Toast.makeText(this, "Veuillez confirmer les informations", Toast.LENGTH_SHORT).show()
 
+                // Check whether the selected group is full
+                (fixedmap[groupe] ?: 0) <= 0 ->
+                    Toast.makeText(
+                        this,
+                        "Désolé, il n'y a plus de places dans $groupe",
+                        Toast.LENGTH_LONG
+                    ).show()
+
                 else -> {
+                    updateCounters()
+                    fixedmap[groupe] = fixedmap.getValue(groupe) - 1
                     tvResultat.text = "FICHE D'INSCRIPTION\n" +
                             "Nom : $nom\n" +
                             "Prénom : $prenom\n" +

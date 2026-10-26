@@ -43,6 +43,57 @@
                 android:textSize="13sp" />
         </LinearLayout>
 
+
+        <!-- Compteurs des places disponibles -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal"
+            android:weightSum="3">
+
+            <TextView
+                android:id="@+id/tvPlacesG1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginEnd="4dp"
+                android:background="@drawable/bg_result"
+                android:gravity="center"
+                android:padding="8dp"
+                android:text="G1 : 8 places"
+                android:textColor="@color/label"
+                android:textSize="11sp" />
+
+            <TextView
+                android:id="@+id/tvPlacesG2"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginHorizontal="4dp"
+                android:background="@drawable/bg_result"
+                android:gravity="center"
+                android:padding="8dp"
+                android:text="G2 : 8 places"
+                android:textColor="@color/label"
+                android:textSize="11sp" />
+
+            <TextView
+                android:id="@+id/tvPlacesG3"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginStart="4dp"
+                android:background="@drawable/bg_result"
+                android:gravity="center"
+                android:padding="8dp"
+                android:text="G3 : 8 places"
+                android:textColor="@color/label"
+                android:textSize="11sp" />
+
+        </LinearLayout>
+
+
         <!-- ===== Contenu du formulaire ===== -->
         <LinearLayout
             android:layout_width="match_parent"
