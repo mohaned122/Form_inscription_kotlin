@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bg_screen"
+    android:fillViewport="true"
+    tools:context=".MainActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <!-- ===== En-tête ===== -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/navy"
+            android:orientation="vertical"
+            android:paddingStart="20dp"
+            android:paddingTop="16dp"
+            android:paddingEnd="20dp"
+            android:paddingBottom="16dp">
+
+            <TextView
+                android:id="@+id/tvTitre"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/titre"
+                android:textColor="@color/white"
+                android:textSize="24sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tvSousTitre"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:text="@string/sous_titre"
+                android:textColor="@color/subtitle"
+                android:textSize="13sp" />
+        </LinearLayout>
+
+        <!-- ===== Contenu du formulaire ===== -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="20dp">
+
+            <!-- Nom -->
+            <TextView
+                style="@style/Form.Label"
+                android:labelFor="@id/etNom"
+                android:text="@string/label_nom" />
+
+            <EditText
+                android:id="@+id/etNom"
+                style="@style/Form.Field"
+                android:hint="@string/hint_nom"
+                android:importantForAutofill="no"
+                android:inputType="textPersonName|textCapWords" />
+
+            <!-- Prénom -->
+            <TextView
+                style="@style/Form.Label"
+                android:labelFor="@id/etPrenom"
+                android:text="@string/label_prenom" />
+
+            <EditText
+                android:id="@+id/etPrenom"
+                style="@style/Form.Field"
+                android:hint="@string/hint_prenom"
+                android:importantForAutofill="no"
+                android:inputType="textPersonName|textCapWords" />
+
+            <!-- Âge -->
+            <TextView
+                style="@style/Form.Label"
+                android:labelFor="@id/etAge"
+                android:text="@string/label_age" />
+
+            <EditText
+                android:id="@+id/etAge"
+                style="@style/Form.Field"
+                android:hint="@string/hint_age"
+                android:importantForAutofill="no"
+                android:inputType="number" />
+
+            <!-- Groupe -->
+            <TextView
+                style="@style/Form.Label"
+                android:labelFor="@id/spGroupe"
+                android:text="@string/label_groupe" />
+
+            <Spinner
+                android:id="@+id/spGroupe"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginTop="6dp"
+                android:background="@drawable/bg_input"
+                android:entries="@array/groupes"
+                android:paddingStart="4dp"
+                android:paddingEnd="8dp" />
+
+            <!-- Support de test -->
+            <TextView
+                style="@style/Form.Label"
+                android:layout_marginTop="24dp"
+                android:text="@string/label_support" />
+
+            <RadioGroup
+                android:id="@+id/rgSupport"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:orientation="horizontal">
+
+                <RadioButton
+                    android:id="@+id/rbEmulateur"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:buttonTint="@color/teal"
+                    android:checked="true"
+                    android:minHeight="48dp"
+                    android:text="@string/emulateur"
+                    android:textColor="@color/label"
+                    android:textSize="13sp" />
+
+                <RadioButton
+                    android:id="@+id/rbTelephone"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:buttonTint="@color/teal"
+                    android:minHeight="48dp"
+                    android:text="@string/telephone"
+                    android:textColor="@color/label"
+                    android:textSize="13sp" />
+            </RadioGroup>
+
+            <!-- Confirmation -->
+            <CheckBox
+                android:id="@+id/cbConfirmation"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:buttonTint="@color/teal"
+                android:minHeight="48dp"
+                android:text="@string/confirmation"
+                android:textColor="@color/label"
+                android:textSize="13sp" />
+
+            <!-- Boutons -->
+            <Button
+                android:id="@+id/btnAfficher"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/bg_btn_primary"
+                android:backgroundTint="@null"
+                android:text="@string/btn_afficher"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:textSize="15sp" />
+
+            <Button
+                android:id="@+id/btnEffacer"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/bg_btn_outline"
+                android:backgroundTint="@null"
+                android:text="@string/btn_effacer"
+                android:textAllCaps="false"
+                android:textColor="@color/teal"
+                android:textSize="15sp" />
+
+            <!-- Zone de récapitulatif -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/bg_result"
+                android:orientation="vertical"
+                android:padding="12dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/zone_recap"
+                    android:textColor="@color/label"
+                    android:textSize="13sp" />
+
+                <TextView
+                    android:id="@+id/tvResultat"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:text="@string/resultat_initial"
+                    android:textColor="@color/result_text"
+                    android:textSize="13sp" />
+            </LinearLayout>
+
+        </LinearLayout>
+    </LinearLayout>
+</ScrollView>

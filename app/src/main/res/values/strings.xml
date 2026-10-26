@@ -1,0 +1,26 @@
+<resources>
+    <string name="app_name">AtelierAndroid</string>
+
+    <string name="titre">Atelier Android</string>
+    <string name="sous_titre">Formulaire d\'inscription</string>
+
+    <string name="label_nom">Nom</string>
+    <string name="label_prenom">Prénom</string>
+    <string name="label_age">Âge</string>
+    <string name="label_groupe">Groupe</string>
+    <string name="label_support">Support de test</string>
+
+    <string name="hint_nom">Saisir votre nom</string>
+    <string name="hint_prenom">Saisir votre prénom</string>
+    <string name="hint_age">Saisir votre âge</string>
+
+    <string name="emulateur">Émulateur</string>
+    <string name="telephone">Téléphone réel</string>
+    <string name="confirmation">Je confirme les informations saisies</string>
+
+    <string name="btn_afficher">Afficher la fiche</string>
+    <string name="btn_effacer">Effacer</string>
+
+    <string name="zone_recap">Zone de récapitulatif</string>
+    <string name="resultat_initial">Votre fiche apparaîtra ici</string>
+</resources>

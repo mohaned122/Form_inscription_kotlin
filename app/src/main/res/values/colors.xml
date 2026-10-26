@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+
+    <color name="bg_screen">#FFFFFF</color>
+    <color name="navy">#1F2D45</color>
+    <color name="subtitle">#8FC1DE</color>
+    <color name="teal">#25776E</color>
+    <color name="label">#33465C</color>
+    <color name="hint">#9AAAB8</color>
+    <color name="input_bg">#F8FAFC</color>
+    <color name="input_stroke">#C5D3E0</color>
+    <color name="result_bg">#EAF4F1</color>
+    <color name="result_text">#5E7184</color>
+</resources>
