@@ -6,4 +6,11 @@
         <item>G2</item>
         <item>G3</item>
     </string-array>
+
+    <string-array name="groupes_filtre">
+        <item>Tous les groupes</item>
+        <item>G1</item>
+        <item>G2</item>
+        <item>G3</item>
+    </string-array>
 </resources>

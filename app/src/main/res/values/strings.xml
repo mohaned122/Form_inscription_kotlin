@@ -18,9 +18,38 @@
     <string name="telephone">Téléphone réel</string>
     <string name="confirmation">Je confirme les informations saisies</string>
 
-    <string name="btn_afficher">Afficher la fiche</string>
+    <string name="btn_afficher">Enregistrer l\'inscription</string>
     <string name="btn_effacer">Effacer</string>
 
     <string name="zone_recap">Zone de récapitulatif</string>
     <string name="resultat_initial">Votre fiche apparaîtra ici</string>
+
+    <!-- Navigation Drawer -->
+    <string name="nav_header_title">Atelier Android</string>
+    <string name="nav_header_subtitle">Administration Scolaire</string>
+    <string name="nav_inscription">Formulaire d\'inscription</string>
+    <string name="nav_list">Liste des classes</string>
+    <string name="nav_exit">Quitter</string>
+    <string name="desc_drawer_toggle">Menu de navigation</string>
+
+    <!-- Écran Liste des classes -->
+    <string name="titre_liste">Gestion des Classes</string>
+    <string name="sous_titre_liste">Admis et liste d\'attente</string>
+    <string name="tab_actuelle">Classe actuelle</string>
+    <string name="tab_attente">Liste d\'attente</string>
+    <string name="search_hint">Rechercher par nom ou prénom…</string>
+    <string name="empty_list_actuelle">Aucun étudiant admis dans cette classe</string>
+    <string name="empty_list_attente">Aucun étudiant sur la liste d\'attente</string>
+    <string name="desc_supprimer">Supprimer l\'étudiant</string>
+    <string name="desc_search">Rechercher</string>
+    <string name="desc_clear_search">Effacer la recherche</string>
+
+    <!-- Dialogues -->
+    <string name="dialog_delete_title">Confirmation</string>
+    <string name="dialog_delete_message">Voulez-vous vraiment supprimer cet étudiant ?</string>
+    <string name="dialog_exit_title">Quitter</string>
+    <string name="dialog_exit_message">Êtes-vous sûr de vouloir quitter l\'application ?</string>
+    <string name="btn_annuler">Annuler</string>
+    <string name="btn_supprimer">Supprimer</string>
+    <string name="btn_quitter">Quitter</string>
 </resources>
