@@ -6,6 +6,7 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
 import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.Spinner
@@ -22,7 +23,7 @@ import com.google.android.material.tabs.TabLayout
 
 /**
  * Activité affichant la liste des étudiants avec onglets (Classe actuelle vs Liste d'attente),
- * recherche dynamique par nom/prénom, filtre par groupe et suppression.
+ * recherche dynamique par nom/prénom, filtre dynamique par groupe et suppression.
  */
 class list_classroom : AppCompatActivity() {
 
@@ -43,6 +44,7 @@ class list_classroom : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        LocaleHelper.applySavedLocale(this)
         setContentView(R.layout.activity_list_classroom)
 
         dbHelper = DatabaseHelper(this)
@@ -57,6 +59,7 @@ class list_classroom : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         navigationView.setCheckedItem(R.id.nav_list)
+        refreshGroupFilterSpinner()
         loadData()
     }
 
@@ -96,7 +99,6 @@ class list_classroom : AppCompatActivity() {
     }
 
     private fun setupSearchAndFilter() {
-        // Écouteur pour la saisie dans le champ de recherche
         etSearch.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
@@ -107,16 +109,34 @@ class list_classroom : AppCompatActivity() {
             override fun afterTextChanged(s: Editable?) {}
         })
 
-        // Bouton pour effacer la recherche
         btnClearSearch.setOnClickListener {
             etSearch.text.clear()
         }
 
-        // Filtre par groupe
+        refreshGroupFilterSpinner()
+    }
+
+    /**
+     * Met à jour dynamiquement les options du filtre de groupe avec les groupes SQLite.
+     */
+    private fun refreshGroupFilterSpinner() {
+        val groups = dbHelper.getAllGroupNames()
+        val filterItems = listOf(getString(R.string.all_groups)) + groups
+        val previousSelected = spFiltreGroupe.selectedItem?.toString()
+
+        val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, filterItems)
+        spFiltreGroupe.adapter = adapter
+
+        if (!previousSelected.isNullOrEmpty()) {
+            val idx = filterItems.indexOf(previousSelected)
+            if (idx >= 0) {
+                spFiltreGroupe.setSelection(idx)
+            }
+        }
+
         spFiltreGroupe.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                val selected = parent?.getItemAtPosition(position).toString()
-                currentGroupFilter = if (position == 0) "Tous" else selected
+                currentGroupFilter = if (position == 0) "Tous" else parent?.getItemAtPosition(position).toString()
                 loadData()
             }
 
@@ -137,7 +157,6 @@ class list_classroom : AppCompatActivity() {
 
         studentAdapter.updateData(students, isWaitingSelected)
 
-        // Gestion de l'affichage vide
         if (students.isEmpty()) {
             rvStudents.visibility = View.GONE
             tvEmpty.visibility = View.VISIBLE
@@ -169,7 +188,7 @@ class list_classroom : AppCompatActivity() {
      * Dialogue de confirmation avant suppression d'un étudiant.
      */
     private fun showDeleteConfirmationDialog(student: Student) {
-        val message = "Voulez-vous vraiment supprimer ${student.nomComplet} (${student.groupe}) ?"
+        val message = "${getString(R.string.dialog_delete_message)}\n${student.nomComplet} (${student.groupe})"
 
         AlertDialog.Builder(this)
             .setTitle(R.string.dialog_delete_title)
@@ -180,23 +199,20 @@ class list_classroom : AppCompatActivity() {
 
                 if (deleted) {
                     if (wasAdmitted) {
-                        // Si l'étudiant était admis, on vérifie s'il y a un étudiant en attente à promouvoir
                         val promotedStudent = dbHelper.promoteNextWaitingStudent(student.groupe)
                         if (promotedStudent != null) {
                             Toast.makeText(
                                 this,
-                                "Étudiant supprimé. ${promotedStudent.nomComplet} a été promu(e) dans ${student.groupe} !",
+                                getString(R.string.toast_student_promoted, promotedStudent.nomComplet, student.groupe),
                                 Toast.LENGTH_LONG
                             ).show()
                         } else {
-                            Toast.makeText(this, R.string.dialog_delete_title, Toast.LENGTH_SHORT).show()
+                            Toast.makeText(this, R.string.toast_student_deleted, Toast.LENGTH_SHORT).show()
                         }
                     } else {
-                        Toast.makeText(this, "Étudiant retiré de la liste d'attente.", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this, R.string.toast_student_deleted, Toast.LENGTH_SHORT).show()
                     }
                     loadData()
-                } else {
-                    Toast.makeText(this, "Erreur lors de la suppression.", Toast.LENGTH_SHORT).show()
                 }
             }
             .setNegativeButton(R.string.btn_annuler, null)
@@ -230,6 +246,15 @@ class list_classroom : AppCompatActivity() {
 
                 R.id.nav_list -> {
                     drawerLayout.closeDrawer(GravityCompat.START)
+                    true
+                }
+
+                R.id.nav_settings -> {
+                    drawerLayout.closeDrawer(GravityCompat.START)
+                    val intent = Intent(this, SettingsActivity::class.java).apply {
+                        flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
+                    }
+                    startActivity(intent)
                     true
                 }
 

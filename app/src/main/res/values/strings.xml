@@ -23,12 +23,15 @@
 
     <string name="zone_recap">Zone de récapitulatif</string>
     <string name="resultat_initial">Votre fiche apparaîtra ici</string>
+    <string name="choose_group">Choisir un groupe</string>
+    <string name="all_groups">Tous les groupes</string>
 
     <!-- Navigation Drawer -->
     <string name="nav_header_title">Atelier Android</string>
     <string name="nav_header_subtitle">Administration Scolaire</string>
     <string name="nav_inscription">Formulaire d\'inscription</string>
     <string name="nav_list">Liste des classes</string>
+    <string name="nav_settings">Paramètres</string>
     <string name="nav_exit">Quitter</string>
     <string name="desc_drawer_toggle">Menu de navigation</string>
 
@@ -52,4 +55,66 @@
     <string name="btn_annuler">Annuler</string>
     <string name="btn_supprimer">Supprimer</string>
     <string name="btn_quitter">Quitter</string>
+    <string name="btn_enregistrer">Enregistrer</string>
+    <string name="btn_modifier">Modifier</string>
+
+    <!-- Menu strings -->
+    <string name="menu_ouvrir">Options</string>
+    <string name="menu_tous">Tous les groupes</string>
+    <string name="menu_g1">Groupe G1</string>
+    <string name="menu_g2">Groupe G2</string>
+    <string name="menu_g3">Groupe G3</string>
+    <string name="menu_apropos">À propos</string>
+
+    <!-- Paramètres (Settings) -->
+    <string name="titre_settings">Paramètres</string>
+    <string name="sous_titre_settings">Configuration de l\'application</string>
+    <string name="section_langue">Langue de l\'application</string>
+    <string name="section_langue_desc">Sélectionnez la langue d\'affichage de l\'application</string>
+    <string name="lang_fr">Français</string>
+    <string name="lang_en">English</string>
+    <string name="section_groupes">Gestion des Groupes et Capacités</string>
+    <string name="section_groupes_desc">Créez des groupes et définissez leurs capacités maximales</string>
+    <string name="btn_ajouter_groupe">Nouveau groupe</string>
+    <string name="dialog_add_group_title">Créer un nouveau groupe</string>
+    <string name="dialog_edit_group_title">Modifier le groupe</string>
+    <string name="label_group_name">Nom du groupe</string>
+    <string name="label_group_capacity">Capacité maximale</string>
+    <string name="hint_group_name">Ex: G4, Classe A…</string>
+    <string name="hint_group_capacity">Ex: 10</string>
+    <string name="empty_groups">Aucun groupe configuré. Cliquez sur le bouton ci-dessus pour en créer un.</string>
+    <string name="dialog_delete_group_title">Supprimer le groupe</string>
+    <string name="dialog_delete_group_message">Voulez-vous supprimer le groupe \"%1$s\" ? Les %2$d étudiant(s) associés seront également supprimés.</string>
+    <string name="badge_places_disponibles">%1$d place(s) disponible(s)</string>
+    <string name="badge_places_stats">%1$d / %2$d inscrits</string>
+    <string name="badge_complet">Complet</string>
+    <string name="badge_waiting_stats">%1$d en attente</string>
+
+    <!-- Messages et validations -->
+    <string name="error_nom_required">Le nom est obligatoire</string>
+    <string name="error_prenom_required">Le prénom est obligatoire</string>
+    <string name="error_age_invalid">Âge invalide (entre 1 et 120)</string>
+    <string name="error_group_required">Veuillez choisir un groupe</string>
+    <string name="error_confirm_required">Veuillez confirmer les informations</string>
+    <string name="error_group_name_empty">Le nom du groupe est obligatoire</string>
+    <string name="error_group_name_exists">Ce nom de groupe existe déjà</string>
+    <string name="error_group_capacity_invalid">La capacité doit être un nombre supérieur à 0</string>
+    <string name="group_added_success">Groupe \"%1$s\" créé avec succès (Capacité: %2$d)</string>
+    <string name="group_updated_success">Groupe \"%1$s\" mis à jour avec succès</string>
+    <string name="group_deleted_success">Groupe supprimé avec succès</string>
+    <string name="toast_waiting_list">Groupe %1$s complet ! Inscrit sur liste d\'attente (#%2$d)</string>
+    <string name="toast_admitted">Étudiant inscrit avec succès dans %1$s !</string>
+    <string name="toast_student_deleted">Étudiant supprimé</string>
+    <string name="toast_student_promoted">Étudiant supprimé. %1$s a été promu(e) dans %2$s !</string>
+    <string name="toast_waiting_promoted">%1$d étudiant(s) de la liste d\'attente ont été admis(es) suite à l\'augmentation de capacité !</string>
+    <string name="toast_language_changed">Langue changée en Français</string>
+    <string name="recap_title_admis">FICHE D\'INSCRIPTION (ADMIS)</string>
+    <string name="recap_title_waiting">FICHE D\'INSCRIPTION (LISTE D\'ATTENTE)</string>
+    <string name="recap_nom">Nom : %1$s</string>
+    <string name="recap_prenom">Prénom : %1$s</string>
+    <string name="recap_age">Âge : %1$d ans</string>
+    <string name="recap_groupe">Groupe : %1$s</string>
+    <string name="recap_support">Support : %1$s</string>
+    <string name="recap_status_admitted">Statut : Admis dans la classe actuelle</string>
+    <string name="recap_status_waiting">Statut : Liste d\'attente (Position #%1$d)</string>
 </resources>

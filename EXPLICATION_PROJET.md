@@ -1,95 +1,114 @@
 # Atelier Android - Application d'Administration Scolaire
 
 ## 1. Présentation du Projet
-Ce projet est une application mobile Android destinée à l'administration d'une école pour la gestion des inscriptions des étudiants dans différents groupes de cours (**G1**, **G2**, **G3**).
-L'application fonctionne entièrement en mode **hors-ligne (off-line)** grâce à une base de données locale **SQLite**.
+Ce projet est une application mobile Android destinée à l'administration d'une école pour la gestion des inscriptions des étudiants dans différents groupes de cours.
+L'application fonctionne entièrement en mode **hors-ligne (off-line)** grâce à une base de données locale **SQLite** et supporte le multilinguisme (**Français** et **Anglais**).
 
 ---
 
-## 2. Architecture et Fonctionnalités Ajoutées
+## 2. Architecture et Fonctionnalités
 
-### 2.1. Persistance des Données avec SQLite (`DatabaseHelper.kt` & `Student.kt`)
-- **Modèle de données (`Student`) :**
+### 2.1. Persistance des Données avec SQLite (`DatabaseHelper.kt`, `Student.kt`, `Group.kt`)
+- **Modèle `Student` (Étudiant) :**
   - `id` : Clé primaire auto-incrémentée (INTEGER PRIMARY KEY AUTOINCREMENT)
-  - `nom` : Nom de l'étudiant (TEXT)
-  - `prenom` : Prénom de l'étudiant (TEXT)
+  - `nom`, `prenom` : Nom et prénom de l'étudiant (TEXT)
   - `age` : Âge (INTEGER)
-  - `groupe` : Groupe choisi (G1, G2, G3) (TEXT)
+  - `groupe` : Groupe choisi (ex: G1, G2, G3, G4...) (TEXT)
   - `support` : Support de test (« Émulateur » ou « Téléphone réel ») (TEXT)
   - `is_waiting` : Statut (0 = Admis dans la classe actuelle, 1 = En liste d'attente)
   - `created_at` : Horodatage d'inscription en millisecondes pour conserver l'ordre d'arrivée (FIFO)
 
-- **Gestionnaire de base de données (`DatabaseHelper`) :**
-  - Nom de la base : `school_admin.db`
-  - Table : `students`
-  - Méthodes implémentées :
-    - `insertStudent(student: Student)` : Ajout d'un étudiant.
-    - `deleteStudent(id: Long)` : Suppression d'un étudiant par son ID.
-    - `getStudents(isWaiting: Boolean, groupe: String?, searchQuery: String?)` : Récupération avec filtrage multicritère (classe actuelle vs attente, groupe sélectionné, recherche textuelle).
-    - `getEnrolledCount(groupe: String)` : Nombre d'étudiants admis par groupe.
-    - `getWaitingCount(groupe: String)` : Nombre d'étudiants en attente par groupe.
-    - `getAvailablePlaces(groupe: String)` : Calcul dynamique des places restantes selon les capacités définies (G1: 1 place, G2: 8 places, G3: 8 places).
-    - `promoteNextWaitingStudent(groupe: String)` : Promotion automatique du premier étudiant de la liste d'attente vers la classe actuelle lorsqu'une place se libère.
+- **Modèle `Group` (Groupe / Classe) :**
+  - `id` : Clé primaire auto-incrémentée
+  - `name` : Nom unique du groupe (ex: G1, G2, G3, G4, Classe A...)
+  - `capacity` : Capacité maximale configurable
+
+- **Gestionnaire `DatabaseHelper` :**
+  - Nom de la base : `school_admin.db` (Version 2)
+  - Tables : `students` et `class_groups`
+  - Groupes pré-initialisés par défaut : G1 (1 place), G2 (8 places), G3 (8 places)
+  - Opérations sur les groupes : `getAllGroups()`, `insertGroup()`, `updateGroup()`, `deleteGroup()`, `getGroupCapacity()`
+  - Opérations sur les étudiants : `insertStudent()`, `deleteStudent()`, `getStudents()` avec filtres et recherche
+  - **Promotion automatique intelligente :** 
+    - Lorsqu'un étudiant admis est supprimé, le premier étudiant de la liste d'attente est automatiquement promu dans la classe actuelle.
+    - Si la capacité d'un groupe est augmentée dans les Paramètres, la méthode `checkAndPromoteWaitingStudents()` promeut automatiquement les étudiants en attente pour combler les nouvelles places disponibles.
 
 ---
 
-### 2.2. Menu de Navigation Latéral - Navigation Drawer (`res/menu/drawer_menu.xml`)
-Un tiroir de navigation latéral (accessible via le bouton hamburger dans l'en-tête de chaque écran ou par glissement depuis la gauche) a été intégré dans `MainActivity` et `list_classroom` :
-- **Formulaire d'inscription (`nav_inscription`)** : Ouvre l'écran du formulaire.
-- **Liste des classes (`nav_list`)** : Ouvre l'écran de consultation et gestion des classes.
-- **Quitter (`nav_exit`)** : Ouvre une boîte de dialogue de confirmation avant de fermer l'application (`finishAffinity()`).
-- En-tête personnalisé (`drawer_header.xml`) aux couleurs de la charte graphique (Navy, Teal).
+### 2.2. Page des Paramètres (`SettingsActivity.kt` & `activity_settings.xml`)
+L'écran des Paramètres regroupe deux fonctionnalités majeures :
+
+1. **Paramètres de Langue (Language Settings) :**
+   - Basculement instantané entre **Français** et **English**.
+   - Implémenté via `LocaleHelper.kt` avec l'API standard `AppCompatDelegate.setApplicationLocales` et sauvegarde dans les `SharedPreferences`.
+   - Tous les textes, libellés, boutons, dialogues et messages toast sont entièrement internationalisés dans `res/values/strings.xml` (Français) et `res/values-en/strings.xml` (Anglais).
+   - La sélection est persistée et restaurée automatiquement au redémarrage de l'application.
+
+2. **Gestion Dynamique des Groupes et des Capacités :**
+   - **Création de nouveaux groupes :** Bouton « Nouveau groupe » avec dialogue de saisie du nom (ex: G4) et de la capacité maximale.
+   - **Modification :** Modification du nom et de la capacité maximale de chaque groupe.
+   - **Suppression sécurisée :** Suppression d'un groupe avec dialogue d'avertissement et suppression en cascade des étudiants associés.
+   - **Indicateurs visuels en temps réel :**
+     - Nombre d'inscrits par rapport à la capacité maximale (ex: `1 / 1 inscrits`).
+     - Badge d'état : `Complet` (en rouge) ou `X place(s) disponible(s)` (en vert).
+     - Badge de liste d'attente : `X en attente` (en orange) si des étudiants patientent.
 
 ---
 
-### 2.3. Gestion de la Liste des Classes (`list_classroom.kt` & `activity_list_classroom.xml`)
-L'écran de consultation des classes offre une suite complète d'outils d'administration :
-
-1. **Onglets (Tabs) : Classe actuelle vs Liste d'attente :**
-   - Un `TabLayout` permet de basculer instantanément entre la liste des étudiants admis dans la **Classe actuelle** et la **Liste d'attente**.
-   - Des compteurs dynamiques sont intégrés aux onglets (ex. `Classe actuelle (3)`, `Liste d'attente (1)`).
-2. **Recherche dynamique par nom ou prénom :**
-   - Champ de recherche en temps réel (`TextWatcher`) permettant de filtrer les étudiants dès la frappe.
-   - Bouton de réinitialisation rapide de la recherche.
-3. **Filtre par groupe :**
-   - Sélecteur déroulant (`Spinner`) pour filtrer par groupe spécifique (`Tous les groupes`, `G1`, `G2`, `G3`).
-4. **Suppression avec boîte de dialogue de confirmation :**
-   - Bouton de suppression (`btnSupprimer`) sur chaque ligne de la liste (`item_student.xml`).
-   - Dialogue d'avertissement demandant confirmation avant la suppression définitive.
-   - **Promotion intelligente de la liste d'attente :** Si un étudiant admis dans un groupe est supprimé, le système promeut automatiquement le premier étudiant en attente pour ce même groupe et en informe l'administrateur par un Toast.
-5. **Indicateurs de position :**
-   - Affichage de la position `#1, #2...` (rang d'attente en orange pour la liste d'attente, numéro d'étudiant en vert pour la classe actuelle).
+### 2.3. Menu de Navigation Latéral - Navigation Drawer (`res/menu/drawer_menu.xml`)
+Accessible depuis tous les écrans via le bouton hamburger ou un balayage latéral :
+- **Formulaire d'inscription (`nav_inscription`)** : Saisie et enregistrement des étudiants.
+- **Liste des classes (`nav_list`)** : Consultation des classes, onglets admis/attente, recherche et suppression.
+- **Paramètres (`nav_settings`)** : Changement de langue et gestion des groupes / quotas.
+- **Quitter (`nav_exit`)** : Confirmation avant fermeture de l'application.
 
 ---
 
-### 2.4. Amélioration du Formulaire d'Inscription (`MainActivity.kt`)
-- Les compteurs de places disponibles (`tvPlacesG1`, `tvPlacesG2`, `tvPlacesG3`) sont synchronisés en temps réel avec la base SQLite et affichent aussi le nombre d'inscrits en liste d'attente.
-- Si un groupe a des places libres, l'étudiant est admis directement.
-- Si le groupe est complet, l'étudiant est automatiquement inscrit sur la **liste d'attente** et sa position lui est notifiée.
-- Les données saisies persistent même après la fermeture complète de l'application.
+### 2.4. Formulaire d'Inscription Dynamique (`MainActivity.kt`)
+- **Compteurs dynamiques :** Une barre horizontale défilante affiche en temps réel les places disponibles et les étudiants en attente pour **tous les groupes configurés** dans SQLite.
+- **Spinner dynamique :** La liste déroulante des groupes s'adapte automatiquement aux groupes créés ou modifiés dans les Paramètres.
+- **Vérification de quota :**
+  - Si des places sont libres, l'étudiant est admis directement dans la classe actuelle.
+  - Si le groupe est complet, l'étudiant est basculé sur la **liste d'attente** avec indication de son rang (ex: `#1`).
 
 ---
 
-## 3. Inventaire des Fichiers Modifiés et Ajoutés
+### 2.5. Liste des Classes (`list_classroom.kt`)
+- **Onglets (Tabs) :** Séparation claire entre **Classe actuelle** et **Liste d'attente**, avec compteurs en direct.
+- **Recherche en temps réel :** Filtrage instantané par nom ou prénom avec bouton d'effacement rapide.
+- **Filtre de groupe dynamique :** Sélecteur déroulant alimenté par les groupes de la base SQLite.
+- **Suppression d'étudiant :** Dialogue de confirmation et promotion automatique du premier étudiant en attente.
+
+---
+
+## 3. Inventaire des Fichiers du Projet
 
 | Fichier | Type | Description |
 |---|---|---|
-| `Student.kt` | Code Kotlin | Modèle de données pour les étudiants. |
-| `DatabaseHelper.kt` | Code Kotlin | Gestionnaire SQLite (CRUD, capacités, promotion d'attente). |
-| `StudentAdapter.kt` | Code Kotlin | Adaptateur RecyclerView pour l'affichage de la liste. |
-| `MainActivity.kt` | Code Kotlin | Formulaire d'inscription relié à SQLite + Navigation Drawer. |
-| `list_classroom.kt` | Code Kotlin | Activité de gestion des classes (Tabs, recherche, suppression). |
-| `activity_main.xml` | Layout XML | Ajout du DrawerLayout, bouton hamburger et navigation. |
-| `activity_list_classroom.xml` | Layout XML | Écran complet des classes (Header, Recherche, Filtre, Tabs, RecyclerView). |
-| `item_student.xml` | Layout XML | Ligne d'affichage pour chaque étudiant (Position, Nom, Infos, Groupe, Poubelle). |
-| `drawer_header.xml` | Layout XML | En-tête du menu latéral. |
-| `drawer_menu.xml` | Menu XML | Définition des entrées du menu (Inscription, Liste, Quitter). |
-| `strings.xml`, `colors.xml`, `arrays.xml` | Ressources XML | Textes, thèmes de couleurs et tableaux de sélection. |
-| `ic_*.xml` | Drawables Vectoriels | Icônes (menu hamburger, inscription, liste, quitter, recherche, effacer, supprimer). |
-| `EXPLICATION_PROJET.md` | Documentation | Ce document explicatif. |
+| `Group.kt` | Kotlin | Modèle de données pour les groupes et leurs capacités. |
+| `Student.kt` | Kotlin | Modèle de données pour les étudiants. |
+| `DatabaseHelper.kt` | Kotlin | Gestionnaire SQLite v2 (étudiants, groupes dynamiques, quotas, promotions). |
+| `LocaleHelper.kt` | Kotlin | Gestionnaire et persistance de la langue (Français / Anglais). |
+| `GroupAdapter.kt` | Kotlin | Adaptateur RecyclerView pour l'affichage et la gestion des groupes. |
+| `StudentAdapter.kt` | Kotlin | Adaptateur RecyclerView pour la liste des étudiants. |
+| `MainActivity.kt` | Kotlin | Écran principal (formulaire, compteurs dynamiques, drawer). |
+| `list_classroom.kt` | Kotlin | Écran de gestion des classes (recherche, onglets, filtre dynamique). |
+| `SettingsActivity.kt` | Kotlin | Écran des Paramètres (langue, création/édition/suppression de groupes). |
+| `activity_settings.xml` | Layout XML | Interface utilisateur de la page des paramètres. |
+| `dialog_group.xml` | Layout XML | Boîte de dialogue pour ajouter / éditer un groupe. |
+| `item_group.xml` | Layout XML | Carte graphique d'un groupe avec badges de places et boutons d'action. |
+| `activity_main.xml` | Layout XML | Interface du formulaire avec compteurs défilants dynamiques. |
+| `activity_list_classroom.xml` | Layout XML | Interface de consultation des classes avec onglets et recherche. |
+| `item_student.xml` | Layout XML | Ligne d'affichage pour chaque étudiant. |
+| `values/strings.xml` | Ressources XML | Textes en Français (langue par défaut). |
+| `values-en/strings.xml` | Ressources XML | Textes en Anglais (English translation). |
+| `drawer_menu.xml` | Menu XML | Menu latéral avec Inscription, Liste, Paramètres, Quitter. |
+| `ic_settings.xml`, `ic_add.xml`, `ic_edit.xml` | Drawables | Icônes vectorielles pour les paramètres et actions. |
+| `GroupModelTest.kt` | Test Unitaire | Tests unitaires pour les modèles Group et Student. |
+| `EXPLICATION_PROJET.md` | Documentation | Documentation complète du projet. |
 
 ---
 
 ## 4. Validation et Tests
-- Compilation Gradle (`assembleDebug`) : **Réussie sans aucune erreur**.
-- Tests unitaires (`testDebugUnitTest`) : **Réussis (100% passés)**.
+- Compilation Gradle (`assembleDebug`) : **Réussie (BUILD SUCCESSFUL)**.
+- Tests unitaires (`testDebugUnitTest`) : **4 passed, 0 failed, 100% succès**.

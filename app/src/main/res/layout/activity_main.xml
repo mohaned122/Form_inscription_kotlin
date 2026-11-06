@@ -68,56 +68,23 @@
                 </LinearLayout>
             </LinearLayout>
 
-            <!-- Compteurs des places disponibles -->
-            <LinearLayout
+            <!-- Compteurs des places disponibles dynamiques (pour tous les groupes) -->
+            <HorizontalScrollView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:paddingStart="12dp"
-                android:paddingEnd="12dp"
-                android:orientation="horizontal"
-                android:weightSum="3">
+                android:clipToPadding="false"
+                android:overScrollMode="never"
+                android:scrollbars="none">
 
-                <TextView
-                    android:id="@+id/tvPlacesG1"
-                    android:layout_width="0dp"
+                <LinearLayout
+                    android:id="@+id/llGroupCounters"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_marginEnd="4dp"
-                    android:background="@drawable/bg_result"
-                    android:gravity="center"
-                    android:padding="8dp"
-                    android:text="G1 : 1 place"
-                    android:textColor="@color/label"
-                    android:textSize="11sp" />
-
-                <TextView
-                    android:id="@+id/tvPlacesG2"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_marginHorizontal="4dp"
-                    android:background="@drawable/bg_result"
-                    android:gravity="center"
-                    android:padding="8dp"
-                    android:text="G2 : 8 places"
-                    android:textColor="@color/label"
-                    android:textSize="11sp" />
-
-                <TextView
-                    android:id="@+id/tvPlacesG3"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_marginStart="4dp"
-                    android:background="@drawable/bg_result"
-                    android:gravity="center"
-                    android:padding="8dp"
-                    android:text="G3 : 8 places"
-                    android:textColor="@color/label"
-                    android:textSize="11sp" />
-
-            </LinearLayout>
+                    android:orientation="horizontal"
+                    android:paddingStart="12dp"
+                    android:paddingEnd="12dp" />
+            </HorizontalScrollView>
 
             <!-- ===== Contenu du formulaire ===== -->
             <LinearLayout
@@ -177,7 +144,6 @@
                     android:layout_height="48dp"
                     android:layout_marginTop="6dp"
                     android:background="@drawable/bg_input"
-                    android:entries="@array/groupes"
                     android:paddingStart="4dp"
                     android:paddingEnd="8dp" />
 
